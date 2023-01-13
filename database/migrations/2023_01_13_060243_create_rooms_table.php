@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('room_status_id');
             $table->foreignId('created_by');
             $table->timestamps();
-            $table->timestamp('deleted_at')->nullable();
+            $table->softDeletes();
         });
     }
 

@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\room;
+use App\Models\RoomStatus;
+use App\Models\Room;
+use App\Http\Requests\RoomPostRequest;
+use App\Http\Requests\RoomUpdateRequest;
+
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class RoomController extends Controller
 {
@@ -14,7 +19,9 @@ class RoomController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Rooms/Index', [
+            'rooms' => Room::with('room_status')->get(),
+        ]);
     }
 
     /**
@@ -24,7 +31,9 @@ class RoomController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Rooms/Create', [
+            'roomStatus' => RoomStatus::get(),
+        ]);
     }
 
     /**
@@ -33,20 +42,13 @@ class RoomController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RoomPostRequest $request)
     {
-        //
-    }
+        $validated = $request->validated();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\room  $room
-     * @return \Illuminate\Http\Response
-     */
-    public function show(room $room)
-    {
-        //
+        $request->user()->rooms()->create($validated);
+
+        return redirect(route('rooms.index'));
     }
 
     /**
@@ -55,31 +57,45 @@ class RoomController extends Controller
      * @param  \App\Models\room  $room
      * @return \Illuminate\Http\Response
      */
-    public function edit(room $room)
+    public function edit(Room $room)
     {
-        //
+        return Inertia::render('Rooms/Edit', [
+            'room' => $room,
+            'roomStatus' => RoomStatus::get(),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\room  $room
+     * @param  \App\Models\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, room $room)
+    public function update(RoomUpdateRequest $request, Room $room)
     {
-        //
+        //added authentication for updating room status
+        $this->authorize('update', $room);
+
+        $validated = $request->validated();
+
+        $room->update($validated);
+
+        return redirect(route('rooms.edit', $room->id));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\room  $room
+     * @param  \App\Models\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function destroy(room $room)
+    public function destroy(Room $room)
     {
-        //
+        $this->authorize('delete', $room);
+
+        $room->delete();
+
+        return redirect(route('rooms.index'));
     }
 }
