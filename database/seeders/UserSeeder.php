@@ -21,14 +21,20 @@ class UserSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'name' => 'admin',
+                'name' => 'admin001',
                 'email' => 'admin@test.com',
                 'password' => Hash::make('1234'),
                 'is_admin' => 1,
             ],
             [
-                'name' => 'test',
-                'email' => 'test@test.com',
+                'name' => 'test001',
+                'email' => 'test001@test.com',
+                'password' => Hash::make('1234'),
+                'is_admin' => 0,
+            ],
+            [
+                'name' => 'test002',
+                'email' => 'test002@test.com',
                 'password' => Hash::make('1234'),
                 'is_admin' => 0,
             ],

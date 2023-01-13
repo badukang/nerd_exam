@@ -25,6 +25,9 @@ export default function Index({ auth, room, roomStatus }) {
 
             <div className="p-20">
                 <form onSubmit={saveRoom}>
+                    <div className="p-2">
+                        <h3>Update</h3>
+                    </div>
                     <div className="overflow-hidden shadow sm:rounded-md">
                         <div className="bg-white px-4 py-5 sm:p-6">
                             <div className="grid grid-cols-6 gap-6">
