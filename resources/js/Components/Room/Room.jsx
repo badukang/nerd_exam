@@ -22,7 +22,7 @@ const Room = ({ room, is_admin }) => {
                     {room.room_status.name}
                 </p>
             </Link>
-            {is_admin && (
+            {is_admin ? (
                 <button
                     onClick={() => deleteRoom(room.id)}
                     className="absolute -top-2 -right-2"
@@ -33,7 +33,7 @@ const Room = ({ room, is_admin }) => {
                         aria-hidden="true"
                     />
                 </button>
-            )}
+            ) : null}
         </div>
     );
 };
